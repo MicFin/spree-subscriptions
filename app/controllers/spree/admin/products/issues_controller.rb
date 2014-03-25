@@ -41,7 +41,7 @@ module Spree
         end
 
         def create          
-          if (new_issue = @magazine.issues.create(params[:issue]))
+          if (new_issue = @magazine.issues.create(issue_params))
             flash[:notice] = t('issue_created')
             redirect_to admin_magazine_issue_path(@magazine, new_issue)
           else
@@ -73,6 +73,10 @@ module Spree
 
         def load_products
           @products = Product.unsubscribable.map { |product| [product.name, product.id] }
+        end
+
+        def issue_params
+          params.require(:issue).permit(:name, :published_at, :shipped_at, :magazine, :magazine_issue_id)
         end
       end
     end
